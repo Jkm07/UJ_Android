@@ -1,12 +1,12 @@
 FROM ubuntu:20.04
 
-RUN apt-get -y update
+RUN apt-get update
 
 RUN apt-get -y install software-properties-common
 
 RUN add-apt-repository -y ppa:deadsnakes/ppa
 
-RUN apt-get -y update
+RUN apt-get update
 
 RUN apt-get -y install python3.8
 
@@ -42,4 +42,4 @@ RUN gradle init --type kotlin-application
 
 COPY build.gradle.kts app/build.gradle.kts
 
-CMD gradle build --offline; gradle run; sleep infinity
+CMD gradle build; gradle run; sleep infinity
