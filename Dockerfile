@@ -2,6 +2,10 @@ FROM ubuntu:20.04
 
 RUN apt-get update
 
+RUN apt-get -y install tzdata
+
+ENV TZ="Europe/Warsaw"
+
 RUN apt-get -y install software-properties-common
 
 RUN add-apt-repository -y ppa:deadsnakes/ppa
@@ -42,4 +46,6 @@ RUN gradle init --type kotlin-application
 
 COPY build.gradle.kts app/build.gradle.kts
 
-CMD gradle build; gradle run; sleep infinity
+RUN gradle build;
+
+CMD gradle run; sleep infinity
