@@ -1,0 +1,12 @@
+version: "3.6"
+
+services:
+  app:
+    build: ./
+    container_name: ktor-app
+    volumes:
+      - ./:/ZadanieKTOR
+    ports: 
+      - 8080:8080
+    expose: 
+      - 8080:8080
