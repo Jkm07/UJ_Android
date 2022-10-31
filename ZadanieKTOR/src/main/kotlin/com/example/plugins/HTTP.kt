@@ -8,13 +8,15 @@ import io.ktor.server.request.*
 
 fun Application.configureHTTP() {
     install(CORS) {
-        allowMethod(HttpMethod.Options)
+        allowMethod(HttpMethod.Post)
+        allowMethod(HttpMethod.Get)
         allowMethod(HttpMethod.Put)
         allowMethod(HttpMethod.Delete)
-        allowMethod(HttpMethod.Patch)
-        allowHeader(HttpHeaders.Authorization)
-        allowHeader("MyCustomHeader")
-        anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
+
+        allowHeader(HttpHeaders.ContentType)
+
+        allowHost("www.google.com", schemes = listOf("http", "https"))
+        allowHost("localhost:3400", schemes = listOf("http", "https"))
     }
 
 }
