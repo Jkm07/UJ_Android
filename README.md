@@ -1,4 +1,5 @@
 # Zadanie Docker
+*Wszystkie podpunkty* 
 
 Link do dockera:
 https://hub.docker.com/repository/docker/dzejkejem/first_docker
@@ -6,6 +7,7 @@ https://hub.docker.com/repository/docker/dzejkejem/first_docker
 ---
 
 # Zadanie KTOR
+*Wszystkie podpunkty* 
 
 CORS został tak skonfigurowany, że pozwala na połączenia hostom: **www.google.com** i **localhost:3400**
 
@@ -29,4 +31,17 @@ fetch('http://127.0.0.1:8080/categories',
             console.error('Error:', error);
         });
 ```
+---
+
+# Zadanie Kalkulator
+*Wszystkie podpunkty* 
+
+> ***Oznacznie niektórych wyrażeń***
+***\~*** - podana liczba z przeciwnym znakiem - **pomnożenie przez -1**
+***POWER*** - podana liczba do potęgi drugiej
+***LOG*** - podana liczba do logarytmu o podstawie dwa
+
+**ZadanieKalkulator/Kalkulator.apk** - gotowe apk aplikacji
+Aplikacja była testowana na **Android 11 i 10**
+
 ---
