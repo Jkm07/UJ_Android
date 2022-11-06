@@ -37,11 +37,15 @@ fetch('http://127.0.0.1:8080/categories',
 *Wszystkie podpunkty* 
 
 > ***Oznacznie niektórych wyrażeń***
+
 ***\~*** - podana liczba z przeciwnym znakiem - **pomnożenie przez -1**
+
 ***POWER*** - podana liczba do potęgi drugiej
+
 ***LOG*** - podana liczba do logarytmu o podstawie dwa
 
 **ZadanieKalkulator/Kalkulator.apk** - gotowe apk aplikacji
+
 Aplikacja była testowana na **Android 11 i 10**
 
 ---
