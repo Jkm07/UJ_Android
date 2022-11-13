@@ -49,3 +49,12 @@ fetch('http://127.0.0.1:8080/categories',
 Aplikacja była testowana na **Android 11 i 10**
 
 ---
+
+# Zadanie Fragmenty
+*Wszystkie podpunkty* 
+
+Nie wiedziałem do końca w jaki sposób mam użyć fragemntów. W końcu każdy element listy jest w osobnym fragmencie
+
+Aplikacja była testowana na **Android 11**
+
+---
