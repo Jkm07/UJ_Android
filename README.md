@@ -55,6 +55,8 @@ Aplikacja była testowana na **Android 11 i 10**
 
 Nie wiedziałem do końca w jaki sposób mam użyć fragemntów. W końcu każdy element listy jest w osobnym fragmencie
 
-Aplikacja była testowana na **Android 11**
+**ZadanieFragmenty/Fragmenty.apk** - gotowe apk aplikacji 
+
+Aplikacja była testowana na **Android 11 i 10**
 
 ---

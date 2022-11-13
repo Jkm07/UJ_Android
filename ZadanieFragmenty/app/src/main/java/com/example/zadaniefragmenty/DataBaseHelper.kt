@@ -9,10 +9,10 @@ class DataBaseHelper(context: Context) :  SQLiteOpenHelper(context, "local.db", 
         val createTableStatment = "CREATE TABLE TASKS (name TEXT, description TEXT, date TEXT, status Boolean)"
         p0?.execSQL(createTableStatment)
         val insert1 = "INSERT INTO TASKS (name, description, date, status) VALUES" +
-                "(\"Wynieść śmieci\", \"śmieci\", \"2.08.2021\", true), " +
-                "(\"Pozmywać naczynia\", \"naczynia\", \"1.08.2021\", false), " +
-                "(\"Coś tam\", \"shdjahka\", \"23.08.2021\", false)," +
-                "(\"Zrobić zadania na androida\", \"śmieci\", \"11.08.2021\", true)"
+                "(\"Wynieść śmieci\", \"śmieci\", \"2.08.2021\", 1), " +
+                "(\"Pozmywać naczynia\", \"naczynia\", \"1.08.2021\", 0), " +
+                "(\"Coś tam\", \"shdjahka\", \"23.08.2021\", 0)," +
+                "(\"Zrobić zadania na androida\", \"śmieci\", \"11.08.2021\", 1)"
         p0?.execSQL(insert1)
     }
 
