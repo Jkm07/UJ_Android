@@ -18,9 +18,8 @@ class MainActivity : AppCompatActivity() {
         taskList.setTask(mydatabase.getAll())
 
         val fm:FragmentManager = supportFragmentManager;
-        var taskListFragment: ArrayList<Fragment> = arrayListOf(TaskFragment(0), TaskFragment(1), TaskFragment(2), TaskFragment(3));
-        for(task in taskListFragment) {
-            fm.beginTransaction().add(R.id.container, task).commit();
+        repeat(taskList.getSize()) { it ->
+            fm.beginTransaction().add(R.id.container, TaskFragment(it)).commit();
         }
     }
 }

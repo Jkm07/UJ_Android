@@ -19,6 +19,10 @@ class TaskViewModel() : ViewModel() {
         _taskList = taskList
     }
 
+    fun getSize() : Int {
+        return _taskList.size;
+    }
+
     fun getTask(id: Int) : Task {
         return _taskList[id]
     }
