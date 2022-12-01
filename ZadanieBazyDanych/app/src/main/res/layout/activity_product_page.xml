@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="product"
+            type="com.example.zadaniebazydanych.model.Product" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{product.name + ` - ` + product.category.name}"
+        android:textSize="25dp"
+        android:paddingLeft="16dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/product_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:paddingLeft="16dp"
+        android:text="@{product.desc}"
+        android:textStyle="italic" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="10dp"
+            android:background="?attr/dividerHorizontal" />
+        <TextView
+            android:id="@+id/category_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Opis kategori"
+            android:textSize="20dp"
+            android:paddingLeft="16dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/category_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:paddingLeft="16dp"
+            android:text="@{product.category.desc}"
+            android:textStyle="italic" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="10dp"
+            android:background="?attr/dividerHorizontal" />
+    </LinearLayout>
+</layout>
