@@ -14,6 +14,8 @@ import com.example.zadaniebazydanych.fragment.products.ProductListAdapter
 
 class BasketFragment : Fragment() {
 
+    lateinit var recyclerView: RecyclerView;
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,13 +26,21 @@ class BasketFragment : Fragment() {
 
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
-        val recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerView)
-        Log.d("STATE", "Basket run up")
+        recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerView)
         val basket = Database.getBasket();
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = BasketAdapter(basket)
+        }
+    }
+
+    fun Notify() {
+        if(this::recyclerView.isInitialized) {
+            val basket = Database.getBasket()
+            recyclerView.apply {
+                adapter = BasketAdapter(basket)
+            }
         }
     }
 }

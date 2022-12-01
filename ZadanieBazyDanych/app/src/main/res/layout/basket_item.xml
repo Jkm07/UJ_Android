@@ -57,16 +57,16 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:paddingRight="16dp"
-                    android:text="@{basket.product.category.name}"
+                    android:text="@{`Ilość: ` + basket.count}"
                     android:textStyle="italic" />
 
                 <Button
-                    android:id="@+id/add_button"
+                    android:id="@+id/delete_button"
                     android:layout_width="wrap_content"
                     android:layout_height="38dp"
                     android:layout_gravity="right"
                     android:paddingRight="16dp"
-                    android:text="Add product"
+                    android:text="Delete product"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>

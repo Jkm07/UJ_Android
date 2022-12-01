@@ -6,11 +6,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.zadaniebazydanych.fragment.basket.BasketFragment
 import com.example.zadaniebazydanych.fragment.products.ProductsFragment
-import io.realm.kotlin.internal.intToLong
 
-class VPAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+class VPAdapter(activity: FragmentActivity, private val _productFragment: ProductsFragment, private val _basketFragment: BasketFragment) : FragmentStateAdapter(activity) {
 
     private val _tabsName = arrayOf("Products", "Basket")
+
 
     fun getTabName(position: Int): String {
         return _tabsName[position];
@@ -21,11 +21,10 @@ class VPAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
     }
 
     override fun createFragment(position: Int): Fragment {
-        Log.d("STATE", "przlacz")
         when(position) {
-            0 -> return ProductsFragment();
-            1 -> return BasketFragment();
-            else -> return BasketFragment();
+            0 -> return _productFragment;
+            1 -> return _basketFragment;
+            else -> return _basketFragment;
         }
     }
 

@@ -9,4 +9,5 @@ class BasketItem : RealmObject {
     var _id: RealmUUID = RealmUUID.random()
     var Product: Product? = null
     var isActive: Boolean = true
+    var count: Int = 1;
 }

@@ -23,12 +23,7 @@ class ProductsFragment : Fragment() {
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
         val recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerView)
-        Log.d("state", "otwarcie database")
-        Database
-        Log.d("state", "zakon database")
-        Log.d("state", "wcztywanie produktow")
         val products = Database.getProducts();
-        Log.d("state", "wczytanie")
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)

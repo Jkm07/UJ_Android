@@ -17,6 +17,6 @@ class ProductPage : AppCompatActivity() {
         val activitDataBinding  = DataBindingUtil.setContentView<ActivityProductPageBinding>(this,
             R.layout.activity_product_page
         )
-        //activitDataBinding.product = Database.getProduct(RealmUUID.from(productId!!));
+        activitDataBinding.product = Database.getProduct(RealmUUID.from(productId!!));
     }
 }
