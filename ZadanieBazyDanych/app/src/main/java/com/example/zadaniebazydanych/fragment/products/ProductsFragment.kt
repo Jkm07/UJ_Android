@@ -22,7 +22,7 @@ class ProductsFragment : Fragment() {
 
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
-        val recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerViewProducts)
         val products = Database.getProducts();
 
         recyclerView.apply {

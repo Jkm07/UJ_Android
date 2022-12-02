@@ -231,6 +231,7 @@ object Database {
             else {
                 delete(latestBasket!!)
             }
+
         }
         basket.Notify()
     }

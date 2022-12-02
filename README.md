@@ -60,3 +60,16 @@ Nie wiedziałem do końca w jaki sposób mam użyć fragemntów. W końcu każdy
 Aplikacja była testowana na **Android 11 i 10**
 
 ---
+---
+
+# Zadanie Intencje
+*Wszystkie podpunkty* 
+
+Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
+
+---
+
+# Zadanie Bazy Danych
+*Wszystkie podpunkty* 
+
+Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych

@@ -26,7 +26,7 @@ class BasketFragment : Fragment() {
 
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
-        recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerViewBasket)
         val basket = Database.getBasket();
 
         recyclerView.apply {
