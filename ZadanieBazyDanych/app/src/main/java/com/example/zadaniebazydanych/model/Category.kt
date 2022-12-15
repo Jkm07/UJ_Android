@@ -6,7 +6,7 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 
 class Category : RealmObject {
     @PrimaryKey
-    var _id: RealmUUID = RealmUUID.random()
+    var _id: Int = -1
     var name: String = ""
     var desc: String = ""
     var isActive: Boolean = false

@@ -2,6 +2,7 @@ package com.example.zadaniebazydanych.productpage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.example.zadaniebazydanych.Database
 import com.example.zadaniebazydanych.R
@@ -17,6 +18,7 @@ class ProductPage : AppCompatActivity() {
         val activitDataBinding  = DataBindingUtil.setContentView<ActivityProductPageBinding>(this,
             R.layout.activity_product_page
         )
-        activitDataBinding.product = Database.getProduct(RealmUUID.from(productId!!));
+        activitDataBinding.product = Database.getProduct(productId!!.toInt());
     }
+
 }

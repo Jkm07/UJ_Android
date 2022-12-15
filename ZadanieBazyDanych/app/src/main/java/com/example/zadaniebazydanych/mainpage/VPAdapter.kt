@@ -5,11 +5,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.zadaniebazydanych.fragment.basket.BasketFragment
+import com.example.zadaniebazydanych.fragment.categories.CategoriesFragment
 import com.example.zadaniebazydanych.fragment.products.ProductsFragment
 
-class VPAdapter(activity: FragmentActivity, private val _productFragment: ProductsFragment, private val _basketFragment: BasketFragment) : FragmentStateAdapter(activity) {
+class VPAdapter(activity: FragmentActivity, private val _productFragment: ProductsFragment, private val _basketFragment: BasketFragment, private val _categoriesFragment: CategoriesFragment) : FragmentStateAdapter(activity) {
 
-    private val _tabsName = arrayOf("Products", "Basket")
+    private val _tabsName = arrayOf("Products", "Basket", "Categories")
 
 
     fun getTabName(position: Int): String {
@@ -17,13 +18,14 @@ class VPAdapter(activity: FragmentActivity, private val _productFragment: Produc
     }
 
     override fun getItemCount(): Int {
-        return 2;
+        return _tabsName.size;
     }
 
     override fun createFragment(position: Int): Fragment {
         when(position) {
             0 -> return _productFragment;
             1 -> return _basketFragment;
+            2 -> return _categoriesFragment;
             else -> return _basketFragment;
         }
     }

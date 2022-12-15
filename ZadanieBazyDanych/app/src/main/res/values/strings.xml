@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ZadanieBazyDanych</string>
+    <string name="app_name">Zadanie na android</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="tab0">Products</string>
     <string name="tab1">Basket</string>

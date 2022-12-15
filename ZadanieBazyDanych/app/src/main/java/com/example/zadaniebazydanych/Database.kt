@@ -2,6 +2,8 @@ package com.example.zadaniebazydanych
 
 import android.util.Log
 import com.example.zadaniebazydanych.fragment.basket.BasketFragment
+import com.example.zadaniebazydanych.fragment.categories.CategoriesFragment
+import com.example.zadaniebazydanych.fragment.products.ProductsFragment
 import com.example.zadaniebazydanych.model.BasketItem
 import com.example.zadaniebazydanych.model.Product
 import com.example.zadaniebazydanych.model.Category
@@ -9,108 +11,74 @@ import com.example.zadaniebazydanych.model.User
 import io.realm.kotlin.InitialDataCallback
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.isValid
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.types.RealmUUID
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 object Database {
     val conf = RealmConfiguration.Builder(schema = setOf(Product::class, Category::class, BasketItem::class, User::class)).name("moja_baza").build()
     var realm: Realm = Realm.open(conf);
     lateinit var basket: BasketFragment;
-    init {
-        if(getProducts().isEmpty()) {
-            realm.writeBlocking {
-                val c1 = Category().apply {
-                    name = "Jedzenie"
-                    desc = "Rzeczy do jedzenia"
-                    isActive = true
-                }
-                val c2 = Category().apply {
-                    name = "Zabawki"
-                    desc = "Bioincle"
-                    isActive = true
-                }
-                val c3 = Category().apply {
-                    name = "Samochody"
-                    desc = "brum brum"
-                    isActive = true
-                }
-                val c4 = Category().apply {
-                    name = "nieaktywna"
-                    desc = ""
-                    isActive = false
-                }
-                val c1ap = copyToRealm(c1)
-                val c2ap = copyToRealm(c2)
-                val c3ap = copyToRealm(c3)
-                val c4ap = copyToRealm(c4)
+    lateinit var productList: ProductsFragment
+    lateinit var categoryList: CategoriesFragment
 
-                val c1p1 = Product().apply {
-                    name = "Ziemnior"
-                    desc = "бульба"
-                    category = c1ap
-                }
+    fun downloadDataFromServer() {
+        var products: List<Product> = emptyList()
+        var categories: List<Category> = emptyList()
+        runBlocking {
+            try {
+                val responseProduct = NetworkAdapter.getProducts()
+                    if(responseProduct.isSuccessful) {
+                        products = responseProduct.body()?.products?.map {
+                            Product().apply{
+                                _id = it.id
+                                name = it.name
+                                price = it.price
+                                desc = it.desc
+                                category = Category().apply {
+                                    _id = it.category.id
+                                    name = it.name
+                                    desc = it.desc
+                                    isActive = true;
+                                }
+                            }
+                        } ?: emptyList()
 
-                val c1p2 = Product().apply {
-                    name = "Ogór"
-                    desc = "Kiszony"
-                    category = c1ap
-                }
+                    }
+                    realm.writeBlocking {
+                        for(product in products) {
+                            copyToRealm(product, UpdatePolicy.ALL)
+                        }
+                    }
+                    val responseCategory = NetworkAdapter.getCategories()
+                    if(responseCategory.isSuccessful) {
+                        categories = responseCategory.body()?.categories?.map {
+                            Category().apply{
+                                _id = it.id
+                                name = it.name
+                                desc = it.desc
+                                isActive = true
+                            }
+                        } ?: emptyList()
 
-                val c1p3 = Product().apply {
-                    name = "Pierogi"
-                    desc = "ruskie"
-                    category = c1ap
-                }
-
-                val c2p1 = Product().apply {
-                    name = "tahu"
-                    desc = "żywioł: ogien"
-                    category = c2ap
-                }
-
-                val c2p2 = Product().apply {
-                    name = "vakama"
-                    desc = "żywioł: woda"
-                    category = c2ap
-                }
-
-                val c2p3 = Product().apply {
-                    name = "kongu"
-                    desc = "żwyioł: ruskie"
-                    category = c2ap
-                }
-
-                val c3p1 = Product().apply {
-                    name = "SP30"
-                    desc = "ferrari"
-                    category = c3ap
-                }
-
-                val c3p2 = Product().apply {
-                    name = "AMG"
-                    desc = "mercedes"
-                    category = c3ap
-                }
-
-                val c3p3 = Product().apply {
-                    name = "maluch"
-                    desc = "fiat"
-                    category = c3ap
-                }
-                copyToRealm(c1p1)
-                copyToRealm(c1p2)
-                copyToRealm(c1p3)
-
-                copyToRealm(c2p1)
-                copyToRealm(c2p2)
-                copyToRealm(c2p3)
-
-                copyToRealm(c3p1)
-                copyToRealm(c3p2)
-                copyToRealm(c3p3)
+                    }
+                    realm.writeBlocking {
+                        for(category in categories) {
+                            copyToRealm(category, UpdatePolicy.ALL)
+                        }
+                    }
+            }
+            catch (Ex:Exception){
+                Log.e("Error",Ex.localizedMessage)
             }
         }
+        productList.Notify()
+        categoryList.Notify()
     }
 
     fun insertProduct(name: String, desc: String, category: Category?) {
@@ -133,11 +101,7 @@ object Database {
         return realm.query<Product>().find().toTypedArray()
     }
 
-    fun getProduct(index: Int): Product {
-        return realm.query<Product>().find()[index]
-    }
-
-    fun getProduct(id: RealmUUID): Product {
+    fun getProduct(id: Int): Product {
         return realm.query<Product>("_id = $0", id).find()[0]
     }
 
@@ -178,8 +142,8 @@ object Database {
         return realm.query<Category>().find().toTypedArray()
     }
 
-    fun getCategory(index: Int): Category {
-        return realm.query<Category>().find()[index]
+    fun getCategory(id: Int): Category {
+        return realm.query<Category>("_id = $0", id).find()[0];
     }
 
     fun updateCategory(id: Int, name: String, desc: String, isActive: Boolean) {

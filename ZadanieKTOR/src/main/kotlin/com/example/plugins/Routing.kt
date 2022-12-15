@@ -14,9 +14,10 @@ fun Application.configureRouting() {
         post("addProduct") {
             val formParameters = call.receiveParameters()
             val name = formParameters.getOrFail("name")
+            val price = formParameters.getOrFail<Int>("price")
             val category = formParameters.getOrFail<Int>("category")
-            val country = formParameters.getOrFail("country")
-            val product = dao.addNewProduct(name, category, country)
+            val desc = formParameters.getOrFail("desc")
+            val product = dao.addNewProduct(name, price, category, desc)
             call.respondRedirect("/product/${product?.id}")
         }
         post("addCategory") {
@@ -36,7 +37,7 @@ fun Application.configureRouting() {
             call.respond(mapOf("category" to dao.category(id)))
         }
         get ("products"){
-            call.respond(mapOf("products" to dao.allProducts()))
+            call.respond(mapOf("products" to dao.allProductsWithCategory()))
         }
         get ("categories"){
             call.respond(mapOf("categories" to dao.allCategories()))
@@ -45,9 +46,10 @@ fun Application.configureRouting() {
             val id = call.parameters.getOrFail<Int>("id").toInt()
             val formParameters = call.receiveParameters()
             val name = formParameters.getOrFail("name")
+            val price = formParameters.getOrFail("price")
             val category = formParameters.getOrFail<Int>("category")
-            val country = formParameters.getOrFail("country")
-            dao.editProduct(id, name, category, country)
+            val desc = formParameters.getOrFail("desc")
+            dao.editProduct(id, name, price.toInt(), category, desc)
             call.respondRedirect("/product/$id")
         }
         put("category/{id}") {

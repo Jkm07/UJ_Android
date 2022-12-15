@@ -6,8 +6,9 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 
 class Product : RealmObject {
     @PrimaryKey
-    var _id: RealmUUID = RealmUUID.random()
+    var _id: Int = -1
     var name: String = ""
+    var price: Int = 0
     var desc: String = ""
     var category: Category? = null
 }
