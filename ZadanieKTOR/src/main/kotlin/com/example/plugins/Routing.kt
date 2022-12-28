@@ -1,8 +1,8 @@
 package com.example.plugins
 
 import com.example.dao.dao
+import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -71,6 +71,54 @@ fun Application.configureRouting() {
             dao.deleteCategory(id)
             call.respondRedirect("/categories")
         }
-
+        post("addUser") {
+            val formParameters = call.receiveParameters()
+            val username = formParameters.getOrFail("username")
+            val email = formParameters.getOrFail("email")
+            val password = formParameters.getOrFail("password")
+            val result = dao.addUser(username, email, password)
+            if(result) call.respond(HttpStatusCode.Accepted,"User has been created")
+            else call.respond(HttpStatusCode.Conflict, "User already exists")
+        }
+        get("users") {
+            call.respond(mapOf("users" to dao.allUsers()))
+        }
+        post("authBasicUser") {
+            val formParameters = call.receiveParameters()
+            val email = formParameters.getOrFail("email")
+            val password = formParameters.getOrFail("password")
+            val user = dao.getUser(email)
+            if(user?.password == password) {
+                dao.generateToken(email)
+                call.respond(mapOf("user" to dao.getUserShort(email)))
+            }
+            else call.respond(HttpStatusCode.Conflict, "")
+        }
+        post("authGitUser") {
+            val formParameters = call.receiveParameters()
+            val email = formParameters.getOrFail("email")
+            val username = formParameters.getOrFail("username")
+            val token = formParameters.getOrFail("token")
+            val user = dao.getUser(email)
+            if(user == null) {
+                dao.addUser(username, email, "")
+            }
+            dao.generateToken(email)
+            dao.saveGitToken(email, token)
+            call.respond(mapOf("user" to dao.getUserShort(email)))
+        }
+        post("authGoogleUser") {
+            val formParameters = call.receiveParameters()
+            val email = formParameters.getOrFail("email")
+            val username = formParameters.getOrFail("username")
+            val token = formParameters.getOrFail("token")
+            val user = dao.getUser(email)
+            if(user == null) {
+                dao.addUser(username, email, "")
+            }
+            dao.generateToken(email)
+            dao.saveGoogleToken(email, token)
+            call.respond(mapOf("user" to dao.getUserShort(email)))
+        }
     }
 }

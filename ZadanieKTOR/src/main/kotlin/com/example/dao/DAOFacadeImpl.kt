@@ -27,6 +27,21 @@ class DAOFacadeImpl : DAOFacade {
         ),
         desc = row[Products.desc]
     )
+
+    private fun resultRowToUser(row: ResultRow) = User(
+        username = row[Users.username],
+        email = row[Users.email],
+        password = row[Users.password],
+        myToken = row[Users.myToken],
+        googleToken = row[Users.googleToken],
+        gitToken = row[Users.gitToken]
+    )
+
+    private fun resultRowToUseShort(row: ResultRow) = UserShort(
+        username = row[Users.username],
+        email = row[Users.email],
+        myToken = row[Users.myToken]
+    )
     override suspend fun allProducts(): List<Product> = dbQuery {
         Products.selectAll().map(::resultRowToProduct)
     }
@@ -103,6 +118,64 @@ class DAOFacadeImpl : DAOFacade {
 
     override suspend fun deleteCategory(id: Int): Boolean = dbQuery {
         Categories.deleteWhere { Categories.id eq id } > 0
+    }
+
+    override suspend fun allUsers(): List<User> = dbQuery {
+        Users.selectAll().map(::resultRowToUser)
+    }
+    override suspend fun addUser(username: String, email: String, password: String): Boolean {
+        val count = dbQuery { Users.select{ Users.email eq email}.count()}
+        if(count > 0) return false;
+
+        return dbQuery {
+            val insertStatment = Users.insert {
+                it[Users.username] = username
+                it[Users.email] = email
+                it[Users.password] = password
+                it[Users.myToken] = ""
+                it[Users.googleToken] = ""
+                it[Users.gitToken] = ""
+            }
+            insertStatment.resultedValues?.isEmpty() == false
+        }
+    }
+
+    override suspend fun getUserShort(email: String): UserShort? = dbQuery {
+        Users
+            .select { Users.email eq email }
+            .map(::resultRowToUseShort)
+            .singleOrNull()
+    }
+
+    override suspend fun getUser(email: String): User? = dbQuery {
+        Users
+            .select { Users.email eq email }
+            .map(::resultRowToUser)
+            .singleOrNull()
+    }
+
+    override suspend fun generateToken(email: String): Int = dbQuery {
+        Users.update( { Users.email eq email }) {
+            it[Users.myToken] = getRandomString()
+        }
+    }
+
+    override suspend fun saveGitToken(email: String, token: String): Int = dbQuery {
+        Users.update( { Users.email eq email }) {
+            it[Users.gitToken] = token
+        }
+    }
+
+    override suspend fun saveGoogleToken(email: String, token: String): Int = dbQuery {
+        Users.update( { Users.email eq email }) {
+            it[Users.googleToken] = token
+        }
+    }
+    private fun getRandomString() : String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..32)
+            .map { allowedChars.random() }
+            .joinToString("")
     }
 }
 

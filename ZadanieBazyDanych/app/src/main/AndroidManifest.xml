@@ -23,14 +23,35 @@
             android:name=".productpage.ProductPage"
             android:exported="false" />
         <activity
+            android:name=".loginpage.SignUpPage"
+            android:exported="false" />
+        <activity
             android:name=".mainpage.MainActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".loginpage.LoginPage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="callback"
+                    android:scheme="zadanieandroid" />
+            </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

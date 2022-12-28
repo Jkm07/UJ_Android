@@ -16,4 +16,12 @@ interface DAOFacade {
     suspend fun addNewCategory(name: String, code: String, desc: String): Category?
     suspend fun editCategory(id: Int, name: String, code: String, desc: String): Boolean
     suspend fun deleteCategory(id: Int): Boolean
+
+    suspend fun allUsers(): List<User>
+    suspend fun addUser(username: String, email: String, password: String) : Boolean
+    suspend fun getUserShort(email: String): UserShort?
+    suspend fun getUser(email: String): User?
+    suspend fun generateToken(email: String) : Int
+    suspend fun saveGoogleToken(email: String, token: String) : Int
+    suspend fun saveGitToken(email: String, token: String) : Int
 }

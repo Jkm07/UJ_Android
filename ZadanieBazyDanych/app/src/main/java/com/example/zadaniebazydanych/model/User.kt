@@ -6,8 +6,8 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 
 class User : RealmObject {
     @PrimaryKey
-    var _id: RealmUUID = RealmUUID.random()
-    var login: String = "user"
-    var password: String = "1234"
-    var username: String = "user"
+    var email: String = ""
+    var password: String = ""
+    var username: String = ""
+    var token: String = ""
 }
