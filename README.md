@@ -73,3 +73,22 @@ Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
 *Wszystkie podpunkty* 
 
 Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
+
+---
+
+# Zadanie Sieci
+*Wszystkie podpunkty* 
+
+Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
+Aby zmienić adres serwera z którym się łączy aplikacji należy edytować zmienną
+**baseUrl** w pakiecie **zadaniebazydanych\NetworkAdapter.kt**
+
+---
+
+# Zadanie Outh
+*Wszystkie podpunkty* 
+
+Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
+Dodałem outh do googla i gita. Aby aplikacja działa poprawnie należy dodać pliki konfiguracyjne
+-**outh.properties** w \assets - dane do łączenia z gitem
+-**google-services.json** w folderze głównym \app
