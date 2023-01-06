@@ -5,6 +5,8 @@ import com.example.models.*
 import kotlinx.coroutines.runBlocking
 import org.h2.util.ParserUtil.JOIN
 import org.jetbrains.exposed.sql.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DAOFacadeImpl : DAOFacade {
     private fun resultRowToProduct(row: ResultRow) = Product(
@@ -41,6 +43,17 @@ class DAOFacadeImpl : DAOFacade {
         username = row[Users.username],
         email = row[Users.email],
         myToken = row[Users.myToken]
+    )
+
+    private fun resultRowToOrderSend(row: ResultRow) = OrderSend(
+        email = row[Orders.email],
+        realName = row[Orders.realName],
+        address = row[Orders.address],
+        date = row[Orders.date],
+        count = row[Orders.count],
+        priceForOne = row[Orders.priceForOne],
+        product = row[Orders.product],
+        isSucceed = row[Orders.isSucceed]
     )
     override suspend fun allProducts(): List<Product> = dbQuery {
         Products.selectAll().map(::resultRowToProduct)
@@ -171,11 +184,48 @@ class DAOFacadeImpl : DAOFacade {
             it[Users.googleToken] = token
         }
     }
+
+    override suspend fun getPriceOfOrder(order: Order): Int {
+        return order.basket.sumOf { (product(it.id)?.price ?: 0) * it.count }
+    }
+
+    override suspend fun allOrders(): List<OrderSend> = dbQuery {
+        Orders.selectAll().map(::resultRowToOrderSend)
+    }
+
+    override suspend fun addNewOrder(
+        email: String,
+        realName: String,
+        address: String,
+        count: Int,
+        price: Int,
+        product: Int,
+        isSucceed: Boolean
+    ): OrderSend? = dbQuery{
+        val insertStatment = Orders.insert {
+            it[Orders.email] = email
+            it[Orders.realName] = realName
+            it[Orders.address] = address
+            it[Orders.count] = count
+            it[Orders.priceForOne] = price
+            it[Orders.date] = getDate()
+            it[Orders.product] = product
+            it[Orders.isSucceed] = isSucceed
+        }
+        insertStatment.resultedValues?.singleOrNull()?.let(::resultRowToOrderSend)
+    }
+
     private fun getRandomString() : String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         return (1..32)
             .map { allowedChars.random() }
             .joinToString("")
+    }
+
+    private fun getDate(): String {
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        val date = Date()
+        return formatter.format(date)
     }
 }
 

@@ -1,21 +1,16 @@
-package com.example.zadaniebazydanych.fragment.basket
+package com.example.zadaniebazydanych.fragment.orders
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zadaniebazydanych.Database
 import com.example.zadaniebazydanych.R
-import com.example.zadaniebazydanych.fragment.products.ProductListAdapter
-import com.example.zadaniebazydanych.loginpage.SignUpPage
 
-class BasketFragment : Fragment() {
+class OrdersFragment : Fragment() {
 
     lateinit var recyclerView: RecyclerView;
 
@@ -24,25 +19,25 @@ class BasketFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_basket, container, false)
+        return inflater.inflate(R.layout.fragment_orders, container, false)
     }
 
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
-        recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerViewBasket)
-        val basket = Database.getBasket();
+        recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerViewOrders)
+        val orders = Database.getOrders();
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = BasketAdapter(basket)
+            adapter = OrdersAdapter(orders)
         }
     }
 
     fun Notify() {
         if(this::recyclerView.isInitialized) {
-            val basket = Database.getBasket()
+            val order = Database.getOrders()
             recyclerView.apply {
-                adapter = BasketAdapter(basket)
+                adapter = OrdersAdapter(order)
             }
         }
     }

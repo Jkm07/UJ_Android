@@ -1,6 +1,10 @@
 package com.example.plugins
 
 import com.example.dao.dao
+import com.example.models.BasketItemShort
+import com.example.models.Order
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -119,6 +123,27 @@ fun Application.configureRouting() {
             dao.generateToken(email)
             dao.saveGoogleToken(email, token)
             call.respond(mapOf("user" to dao.getUserShort(email)))
+        }
+        post("makeOrder") {
+            val moneyInBank = 10000000
+            val order = call.receive<Order>()
+            val user = dao.getUser(order.email)
+            if(user?.myToken == order.token) {
+                val price = dao.getPriceOfOrder(order)
+                val isSucceed = moneyInBank > price
+                for(b in order.basket) {
+                    val productPrice = dao.product(b.id)?.price
+                    dao.addNewOrder(order.email, order.realName, order.address, b.count, productPrice ?: -1, b.id, if(productPrice == null) isSucceed else false)
+                }
+                if(isSucceed) call.respond(HttpStatusCode.Accepted)
+                else call.respond(HttpStatusCode.Unauthorized)
+            }
+            else {
+                call.respond(HttpStatusCode.Unauthorized)
+            }
+        }
+        get("orders") {
+            call.respond(dao.allOrders())
         }
     }
 }

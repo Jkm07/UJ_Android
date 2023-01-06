@@ -3,33 +3,32 @@ package com.example.zadaniebazydanych
 import android.util.Log
 import com.example.zadaniebazydanych.fragment.basket.BasketFragment
 import com.example.zadaniebazydanych.fragment.categories.CategoriesFragment
+import com.example.zadaniebazydanych.fragment.orders.OrdersFragment
 import com.example.zadaniebazydanych.fragment.products.ProductsFragment
 import com.example.zadaniebazydanych.model.BasketItem
 import com.example.zadaniebazydanych.model.Product
 import com.example.zadaniebazydanych.model.Category
+import com.example.zadaniebazydanych.model.Order
 import com.example.zadaniebazydanych.model.User
-import io.realm.kotlin.InitialDataCallback
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.UpdatePolicy
-import io.realm.kotlin.ext.isValid
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.types.RealmUUID
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 object Database {
-    val conf = RealmConfiguration.Builder(schema = setOf(Product::class, Category::class, BasketItem::class, User::class)).name("moja_baza").build()
+    val conf = RealmConfiguration.Builder(schema = setOf(Product::class, Category::class, BasketItem::class, User::class, Order::class)).name("moja_baza").build()
     var realm: Realm = Realm.open(conf);
     lateinit var basket: BasketFragment;
     lateinit var productList: ProductsFragment
     lateinit var categoryList: CategoriesFragment
+    lateinit var ordersList: OrdersFragment
 
     fun downloadDataFromServer() {
         var products: List<Product> = emptyList()
         var categories: List<Category> = emptyList()
+        var orders: List<Order> = emptyList()
         runBlocking {
             try {
                 val responseProduct = NetworkAdapter.getProducts()
@@ -72,6 +71,27 @@ object Database {
                             copyToRealm(category, UpdatePolicy.ALL)
                         }
                     }
+                val responseOrder = NetworkAdapter.getOrders()
+                if(responseOrder.isSuccessful) {
+                    orders = responseOrder.body()?.map {
+                        Order().apply {
+                            email = it.email
+                            realName = it.realName
+                            date = it.date
+                            address = it.address
+                            count = it.count
+                            priceForOne = it.priceForOne
+                            product = getProduct(it.product)
+                            isSucceed = it.isSucceed
+                        }
+                    } ?: emptyList()
+                }
+                realm.writeBlocking {
+                    for(order in orders) {
+                        order.product = findLatest(order.product !!)
+                        copyToRealm(order, UpdatePolicy.ALL)
+                    }
+                }
             }
             catch (Ex:Exception){
                 Log.e("Error",Ex.localizedMessage)
@@ -79,6 +99,7 @@ object Database {
         }
         productList.Notify()
         categoryList.Notify()
+        ordersList.Notify()
     }
 
     fun insertProduct(name: String, desc: String, category: Category?) {
@@ -196,6 +217,46 @@ object Database {
                 delete(latestBasket!!)
             }
 
+        }
+        basket.Notify()
+    }
+
+    fun getOrders(): Array<Order> {
+        return realm.query<Order>().find().toTypedArray()
+    }
+
+    fun saveOrdersFromRemote() {
+        var orders: List<Order> = emptyList()
+        runBlocking {
+            val responseOrder = NetworkAdapter.getOrders()
+            if(responseOrder.isSuccessful) {
+                orders = responseOrder.body()?.map {
+                    Order().apply {
+                        email = it.email
+                        realName = it.realName
+                        date = it.date
+                        address = it.address
+                        count = it.count
+                        priceForOne = it.priceForOne
+                        product = getProduct(it.product)
+                        isSucceed = it.isSucceed
+                    }
+                } ?: emptyList()
+                realm.writeBlocking {
+                    for(order in orders) {
+                        order.product = findLatest(order.product !!)
+                        copyToRealm(order, UpdatePolicy.ALL)
+                    }
+                }
+                ordersList.Notify()
+            }
+        }
+    }
+
+    fun deleteEntireBasket() {
+        realm.writeBlocking {
+            val basket = query<BasketItem>().find()
+            delete(basket)
         }
         basket.Notify()
     }

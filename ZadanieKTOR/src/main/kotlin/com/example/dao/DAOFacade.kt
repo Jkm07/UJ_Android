@@ -24,4 +24,8 @@ interface DAOFacade {
     suspend fun generateToken(email: String) : Int
     suspend fun saveGoogleToken(email: String, token: String) : Int
     suspend fun saveGitToken(email: String, token: String) : Int
+
+    suspend fun getPriceOfOrder(order: Order) : Int
+    suspend fun allOrders(): List<OrderSend>
+    suspend fun addNewOrder(email: String, realName: String, address: String, count: Int, price: Int, product: Int, isSucceed: Boolean): OrderSend?
 }
