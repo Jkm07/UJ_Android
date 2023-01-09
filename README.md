@@ -65,21 +65,21 @@ Aplikacja była testowana na **Android 11 i 10**
 # Zadanie Intencje
 *Wszystkie podpunkty* 
 
-Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
+Zadanie jak każde inne od zadania 5 znajduje się w folderze **Zadania5-11**
 
 ---
 
 # Zadanie Bazy Danych
 *Wszystkie podpunkty* 
 
-Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
+Zadanie jak każde inne od zadania 5 znajduje się w folderze **Zadania5-11**
 
 ---
 
 # Zadanie Sieci
 *Wszystkie podpunkty* 
 
-Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
+Zadanie jak każde inne od zadania 5 znajduje się w folderze **Zadania5-11**
 Aby zmienić adres serwera z którym się łączy aplikacji należy edytować zmienną
 **baseUrl** w pakiecie **zadaniebazydanych\NetworkAdapter.kt**
 
@@ -88,9 +88,11 @@ Aby zmienić adres serwera z którym się łączy aplikacji należy edytować zm
 # Zadanie Outh
 *Wszystkie podpunkty* 
 
-Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
+Zadanie jak każde inne od zadania 5 znajduje się w folderze **Zadania5-11**
 Dodałem outh do googla i gita. Aby aplikacja działa poprawnie należy dodać pliki konfiguracyjne
+
 > **outh.properties** w \assets - dane do łączenia z gitem
+
 > **google-services.json** w folderze głównym \app
 
 ---
@@ -98,5 +100,5 @@ Dodałem outh do googla i gita. Aby aplikacja działa poprawnie należy dodać p
 # Zadanie Płatności
 *Wszystkie podpunkty* 
 
-Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
+Zadanie jak każde inne od zadania 5 znajduje się w folderze **Zadania5-11**
 Dodałem przykładowe konfigi do poprzednich zadań. Dodałem nowego konfiga do ktora **application.conf**
