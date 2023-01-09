@@ -90,5 +90,13 @@ Aby zmienić adres serwera z którym się łączy aplikacji należy edytować zm
 
 Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
 Dodałem outh do googla i gita. Aby aplikacja działa poprawnie należy dodać pliki konfiguracyjne
--**outh.properties** w \assets - dane do łączenia z gitem
--**google-services.json** w folderze głównym \app
+> **outh.properties** w \assets - dane do łączenia z gitem
+> **google-services.json** w folderze głównym \app
+
+---
+
+# Zadanie Płatności
+*Wszystkie podpunkty* 
+
+Zadanie jak każde inne od zadania 5 znajduje się w folderze ZadaniaBazy danych
+Dodałem przykładowe konfigi do poprzednich zadań. Dodałem nowego konfiga do ktora **application.conf**

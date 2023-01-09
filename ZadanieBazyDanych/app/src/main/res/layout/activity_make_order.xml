@@ -4,7 +4,7 @@
         <import type="android.view.View"/>
         <variable
             name="order"
-            type="com.example.zadaniebazydanych.makeorderpage.Order" />
+            type="com.example.zadaniebazydanych.makeorderpage.MakeOrder.OrderSend" />
     </data>
 
     <LinearLayout
@@ -150,7 +150,16 @@
                 android:backgroundTint="#3F51B5"
                 android:text="Confirm"
                 android:textSize="11sp"
-                android:onClick="sendOrder"/>
+                android:onClick="showStripePaymentSheet"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:backgroundTint="#3F51B5"
+                android:text="PayU"
+                android:textSize="11sp"
+                android:onClick="showPaymentSheet"/>
         </LinearLayout>
     </LinearLayout>
 </layout>

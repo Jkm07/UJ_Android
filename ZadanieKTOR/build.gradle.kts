@@ -61,4 +61,5 @@ dependencies {
     implementation("com.h2database:h2:$h2_version")
 
     implementation("io.ktor:ktor-server-cors:$ktor_version")
+    implementation("com.stripe:stripe-java:22.0.0")
 }

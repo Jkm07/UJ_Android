@@ -12,8 +12,8 @@ import retrofit2.http.*
 
 
 object GitHubAdapter {
-    private val clientId = ConfigFileHandler.getConfigValue("clientId")
-    private val clientSecret = ConfigFileHandler.getConfigValue("clientSecret")
+    private val clientId = ConfigFileHandler.getAuthConfigValue("clientId")
+    private val clientSecret = ConfigFileHandler.getAuthConfigValue("clientSecret")
     private val redirectUri = "zadanieAndroid://callback"
     public var tokenContainer: AccessToken = AccessToken("", "");
 

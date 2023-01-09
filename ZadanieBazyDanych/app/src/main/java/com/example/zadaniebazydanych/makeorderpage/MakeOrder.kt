@@ -1,7 +1,6 @@
 package com.example.zadaniebazydanych.makeorderpage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
@@ -13,18 +12,61 @@ import com.example.zadaniebazydanych.R
 import com.example.zadaniebazydanych.auth.UserInfo
 import com.example.zadaniebazydanych.databinding.ActivityMakeOrderBinding
 import com.example.zadaniebazydanych.model.BasketItem
+import com.example.zadaniebazydanych.payments.PayUHandler
+import com.example.zadaniebazydanych.payments.StriperHandler
+import com.stripe.android.PaymentConfiguration
+import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.PaymentSheetResult
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.*
 
 class MakeOrder : AppCompatActivity() {
+
+
+    fun commitTransaction() {
+        val basket = toOrderShort(Database.getBasket());
+        val realName = findViewById<EditText>(R.id.realName).text.toString()
+        val address = findViewById<EditText>(R.id.address).text.toString()
+        runBlocking {
+            val result = NetworkAdapter.makeOrder(UserInfo.Email, UserInfo.Token, realName, address, basket)
+            if(result) {
+                Database.saveOrdersFromRemote()
+                Database.deleteEntireBasket()
+                Toast.makeText(applicationContext, "Operation done", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Toast.makeText(applicationContext, "Operation failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
+        when (paymentSheetResult) {
+            is PaymentSheetResult.Canceled -> {
+                Toast.makeText(applicationContext, "Cancelled", Toast.LENGTH_SHORT).show()
+            }
+            is PaymentSheetResult.Failed -> {
+                Toast.makeText(applicationContext, "Error: ${paymentSheetResult.error}", Toast.LENGTH_SHORT).show()
+            }
+            is PaymentSheetResult.Completed -> {
+                commitTransaction()
+            }
+        }
+    }
+
+    fun onPaySheetResult() {
+        commitTransaction()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val basket = Database.getBasket();
         val price = getPrice(basket)
         val basketString = getBasketString(basket)
+        StriperHandler.init(this, ::onPaymentSheetResult)
 
-        val order = Order(UserInfo.Email, UserInfo.Token, UserInfo.Username, "", getDate(), price, basketString);
+        val order = OrderSend(UserInfo.Email, UserInfo.Token, UserInfo.Username, "", getDate(), price, basketString);
         val activitDataBinding  = DataBindingUtil.setContentView<ActivityMakeOrderBinding>(this,
             R.layout.activity_make_order
         )
@@ -65,25 +107,22 @@ class MakeOrder : AppCompatActivity() {
         return basket.map { BasketItemShort(it.Product?._id ?: -1, it.count) }.toTypedArray()
     }
 
-    fun sendOrder(view: View) {
+    fun showStripePaymentSheet(view: View) {
         val basket = toOrderShort(Database.getBasket());
         val realName = findViewById<EditText>(R.id.realName).text.toString()
         val address = findViewById<EditText>(R.id.address).text.toString()
-        runBlocking {
-            val result = NetworkAdapter.makeOrder(UserInfo.Email, UserInfo.Token, realName, address, basket)
-            if(result) {
-                Database.saveOrdersFromRemote()
-                Database.deleteEntireBasket()
-                Toast.makeText(applicationContext, "Operation done", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                Toast.makeText(applicationContext, "Operation failed", Toast.LENGTH_SHORT).show()
-            }
-        }
+        StriperHandler.handleOperation(this, basket, realName, address)
     }
-}
 
-data class Order(
+    fun showPaymentSheet(view: View) {
+        val basket = Database.getBasket();
+        val price = getPrice(basket)
+        val basketString = getBasketString(basket)
+        val order = OrderSend(UserInfo.Email, UserInfo.Token, UserInfo.Username, "", getDate(), price, basketString);
+        PayUHandler.init(this, order, ::onPaySheetResult)
+    }
+
+data class OrderSend(
     val email: String,
     val token: String,
     val realName: String,
@@ -96,4 +135,5 @@ data class BasketItemShort(
     val id: Int,
     val count: Int
 )
+}
 

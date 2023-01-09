@@ -1,8 +1,7 @@
 package com.example.zadaniebazydanych
 
-import android.util.Log
 import com.example.zadaniebazydanych.auth.UserInfo
-import com.example.zadaniebazydanych.makeorderpage.BasketItemShort
+import com.example.zadaniebazydanych.makeorderpage.MakeOrder.BasketItemShort
 import com.google.gson.GsonBuilder
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -12,7 +11,7 @@ import retrofit2.http.*
 
 
 object NetworkAdapter {
-    private val baseUrl: String = "https://15f1-185-234-91-175.eu.ngrok.io";
+    private val baseUrl: String = ConfigFileHandler.getBasicConfigVale("serwer_IP");
     private val gson = GsonBuilder().setLenient().create()
     private val instance = Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(
         ScalarsConverterFactory.create()).addConverterFactory(GsonConverterFactory.create(gson)).build().create(Api::class.java)
@@ -66,6 +65,9 @@ object NetworkAdapter {
 
         @POST("/makeOrder")
         suspend fun makeOrder(@Body order: Order) : Response<String>
+
+        @POST("/setUpPayment")
+        suspend fun setupPayment(@Body order: Order): Response<Map<String,String>>
     }
 
     suspend fun insertProduct(name: String, price: Int, category: Int, desc: String) {
@@ -125,5 +127,9 @@ object NetworkAdapter {
     suspend fun makeOrder(email: String, token: String, realName: String, address: String, basket: Array<BasketItemShort>): Boolean {
         val result = instance.makeOrder(Order(email, token, realName, address,  basket))
         return result.code() == 200;
+    }
+
+    suspend fun setUpPayment(email: String, token: String, realName: String, address: String, basket: Array<BasketItemShort>): Response<Map<String, String>>? {
+        return instance.setupPayment(Order(email, token, realName, address,  basket));
     }
 }

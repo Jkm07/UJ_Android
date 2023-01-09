@@ -1,16 +1,22 @@
 package com.example.plugins
 
+import Enviroment
 import com.example.dao.dao
-import com.example.models.BasketItemShort
 import com.example.models.Order
-import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.stripe.Stripe
+import com.stripe.model.Customer
+import com.stripe.model.EphemeralKey
+import com.stripe.model.PaymentIntent
+import com.stripe.param.CustomerCreateParams
+import com.stripe.param.EphemeralKeyCreateParams
+import com.stripe.param.PaymentIntentCreateParams
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
+
 
 fun Application.configureRouting() {
 
@@ -125,12 +131,10 @@ fun Application.configureRouting() {
             call.respond(mapOf("user" to dao.getUserShort(email)))
         }
         post("makeOrder") {
-            val moneyInBank = 10000000
             val order = call.receive<Order>()
             val user = dao.getUser(order.email)
             if(user?.myToken == order.token) {
-                val price = dao.getPriceOfOrder(order)
-                val isSucceed = moneyInBank > price
+                val isSucceed = true
                 for(b in order.basket) {
                     val productPrice = dao.product(b.id)?.price
                     dao.addNewOrder(order.email, order.realName, order.address, b.count, productPrice ?: -1, b.id, if(productPrice == null) isSucceed else false)
@@ -144,6 +148,40 @@ fun Application.configureRouting() {
         }
         get("orders") {
             call.respond(dao.allOrders())
+        }
+        post("setUpPayment") {
+            val order = call.receive<Order>()
+            val price = dao.getPriceOfOrder(order) * 100;
+            Stripe.apiKey = Enviroment.secretKey
+
+            val userStripeParams = CustomerCreateParams.builder().build()
+            val userStripe = Customer.create(userStripeParams)
+
+            val myKeyParams = EphemeralKeyCreateParams.builder()
+                .setStripeVersion("2022-11-15")
+                .setCustomer(userStripe.id)
+                .build()
+            val myKey = EphemeralKey.create(myKeyParams)
+
+            val paymentMethodTypes: MutableList<String> = ArrayList()
+            paymentMethodTypes.add("card")
+
+            val paymentIntentParams = PaymentIntentCreateParams.builder()
+                .setAmount(price.toLong())
+                .setCurrency("pln")
+                .setCustomer(userStripe.id)
+                .addAllPaymentMethodType(paymentMethodTypes)
+                .build()
+
+            val paymentIntent = PaymentIntent.create(paymentIntentParams)
+
+            val responseData: HashMap<String?, String?> = HashMap()
+            responseData["paymentIntent"] = paymentIntent.clientSecret
+            responseData["ephemeralKey"] = myKey.secret
+            responseData["customer"] = userStripe.id
+            responseData["publishableKey"] = Enviroment.stripeKey
+
+            call.respond(responseData)
         }
     }
 }

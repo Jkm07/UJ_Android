@@ -8,10 +8,21 @@ import java.util.*
 
 
 object ConfigFileHandler {
-    private val prop = Properties();
-    fun getConfigValue(name: String?): String {
+    private val outhProp = Properties();
+    private val basicProp = Properties();
+    fun getAuthConfigValue(name: String?): String {
         try {
-            return prop.getProperty(name)
+            return outhProp.getProperty(name)
+        } catch (e: Resources.NotFoundException) {
+            Log.e("error", "Unable to find the config file: " + e.message)
+        } catch (e: IOException) {
+            Log.e("error", "Failed to open config file.")
+        }
+        return ""
+    }
+    fun getBasicConfigVale(name: String?): String {
+        try {
+            return basicProp.getProperty(name)
         } catch (e: Resources.NotFoundException) {
             Log.e("error", "Unable to find the config file: " + e.message)
         } catch (e: IOException) {
@@ -24,7 +35,9 @@ object ConfigFileHandler {
         try {
             val assets = context.assets
             val inputStream = assets.open("outh.properties")
-            prop.load(inputStream)
+            outhProp.load(inputStream)
+            val basicInputStream = assets.open("basic.properties")
+            basicProp.load(basicInputStream)
         } catch (e: Resources.NotFoundException) {
             Log.e("error", "Unable to find the config file: " + e.message)
         } catch (e: IOException) {
