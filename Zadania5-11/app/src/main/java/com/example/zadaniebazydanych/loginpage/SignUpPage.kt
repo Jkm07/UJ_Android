@@ -24,10 +24,24 @@ class SignUpPage : AppCompatActivity() {
         val username = findViewById<EditText>(R.id.login).text.toString()
         val email = findViewById<EditText>(R.id.email).text.toString()
         val pass = findViewById<EditText>(R.id.password).text.toString()
+        if(!emailValidate(email)) {
+            Toast.makeText(applicationContext, "Error - email", Toast.LENGTH_LONG).show()
+            return;
+        }
         var message = ""
         runBlocking {
             message = NetworkAdapter.insertUser(username, email, pass)
         }
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+    }
+
+    fun emailValidate(email: String) : Boolean {
+        if(!email.contains('@')) {
+            return false
+        }
+        if(email.contains(' ')) {
+            return false
+        }
+        return true
     }
 }

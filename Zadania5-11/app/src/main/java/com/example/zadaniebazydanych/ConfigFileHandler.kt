@@ -10,7 +10,12 @@ import java.util.*
 object ConfigFileHandler {
     private val outhProp = Properties();
     private val basicProp = Properties();
+    private var isInit = false;
+
     fun getAuthConfigValue(name: String?): String {
+        if(!isInit) {
+            return "";
+        }
         try {
             return outhProp.getProperty(name)
         } catch (e: Resources.NotFoundException) {
@@ -21,6 +26,9 @@ object ConfigFileHandler {
         return ""
     }
     fun getBasicConfigVale(name: String?): String {
+        if(!isInit) {
+            return "https://127.0.0.1";
+        }
         try {
             return basicProp.getProperty(name)
         } catch (e: Resources.NotFoundException) {
@@ -38,6 +46,7 @@ object ConfigFileHandler {
             outhProp.load(inputStream)
             val basicInputStream = assets.open("basic.properties")
             basicProp.load(basicInputStream)
+            isInit = true;
         } catch (e: Resources.NotFoundException) {
             Log.e("error", "Unable to find the config file: " + e.message)
         } catch (e: IOException) {

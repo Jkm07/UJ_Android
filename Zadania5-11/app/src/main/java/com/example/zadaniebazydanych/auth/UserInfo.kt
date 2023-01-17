@@ -15,6 +15,15 @@ object UserInfo {
     }
 
     fun getUserInfo() : String {
-        return "Użytwkonik: $Username - $Type";
+        if(Username.isEmpty()) {
+            return "Nie zalogowano"
+        }
+        if(Token.isEmpty()) {
+            return "Brak połączena"
+        }
+        if(Type.isEmpty() || Type == "basic") {
+            return "Użytkownik: $Username"
+        }
+        return "Użytkownik: $Username - $Type";
     }
 }

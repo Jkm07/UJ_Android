@@ -102,3 +102,17 @@ Dodałem outh do googla i gita. Aby aplikacja działa poprawnie należy dodać p
 
 Zadanie jak każde inne od zadania 5 znajduje się w folderze **Zadania5-11**
 Dodałem przykładowe konfigi do poprzednich zadań. Dodałem nowego konfiga do ktora **application.conf**
+
+---
+
+# Zadanie Testy
+*Wszystkie podpunkty* 
+
+Zadanie jak każde inne od zadania 5 znajduje się w folderze **Zadania5-11**
+Na browsestacku większość tych testów nie przechodzi (jakieś 60%). U mnie lokalnie sprawa wygląda o wiele lepiej 40 na 50 testów jest Ok.
+Wydaje mi się, że to problem z biblioteką do mockowania albo ja tam z tym namieszałem.
+Link zaproszenie do zespołów
+https://accounts.browserstack.com/jointeam/8274575fccf21f51702b55e8d635bc0f
+Linki do testów: 
+https://app-automate.browserstack.com/dashboard/v2/builds/bf337e71563890709e36a060d9b48579e6a59adf
+https://app-automate.browserstack.com/dashboard/v2/builds/189bd15e7748d57b5891611278bf233ab713fbd2

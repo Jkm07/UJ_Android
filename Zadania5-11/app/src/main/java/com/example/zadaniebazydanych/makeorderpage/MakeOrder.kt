@@ -28,6 +28,10 @@ class MakeOrder : AppCompatActivity() {
         val basket = toOrderShort(Database.getBasket());
         val realName = findViewById<EditText>(R.id.realName).text.toString()
         val address = findViewById<EditText>(R.id.address).text.toString()
+        if(address.isEmpty() || realName.isEmpty()) {
+            Toast.makeText(applicationContext, "Operation failed", Toast.LENGTH_SHORT).show()
+            return
+        }
         runBlocking {
             val result = NetworkAdapter.makeOrder(UserInfo.Email, UserInfo.Token, realName, address, basket)
             if(result) {

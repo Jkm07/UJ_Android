@@ -33,6 +33,10 @@ class CreateProduct : AppCompatActivity() {
         val price = findViewById<EditText>(R.id.priceInput).text.toString().toInt()
         val desc = findViewById<EditText>(R.id.descInput).text.toString()
 
+        if(price <= 0 && name.isEmpty()) {
+            return
+        }
+
         runBlocking {
             NetworkAdapter.insertProduct(name, price,categoryId, desc)
         }
