@@ -183,5 +183,18 @@ fun Application.configureRouting() {
 
             call.respond(responseData)
         }
+
+        post("userChat") {
+            val formParameters = call.receiveParameters()
+            val username = formParameters.getOrFail("username")
+            val message = formParameters.getOrFail("message")
+            if(message.isEmpty()) {
+                call.respond("HEHE OGÓR $username")
+            }
+            else {
+                call.respond("Dziękujemy za twoją opinię $username")
+            }
+
+        }
     }
 }

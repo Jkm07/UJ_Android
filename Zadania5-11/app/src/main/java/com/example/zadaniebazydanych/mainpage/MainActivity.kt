@@ -3,6 +3,7 @@ package com.example.zadaniebazydanych.mainpage
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
@@ -16,6 +17,7 @@ import com.example.zadaniebazydanych.fragment.orders.OrdersFragment
 import com.example.zadaniebazydanych.fragment.products.ProductsFragment
 import com.example.zadaniebazydanych.loginpage.SignUpPage
 import com.example.zadaniebazydanych.makeorderpage.MakeOrder
+import com.example.zadaniebazydanych.notifacation.Notification
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -45,6 +47,8 @@ class MainActivity : AppCompatActivity() {
 
         ViewPager.adapter = vpAdapter;
         TabLayoutMediator(TabLayout, ViewPager) { tab, position -> tab.text = vpAdapter.getTabName(position)}.attach()
+        Notification.notifyUserDefault(this, "Nowe produkty", "Nowe produkty w naszym sklepie")
+        Notification.notifyUserImportant(this, "Promocja", "Promocja na jakiś tam produkt do końca tygodnia")
     }
 
     fun OpenCreateProductForm(view: View) {

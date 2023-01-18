@@ -2,11 +2,11 @@ package com.example.zadaniebazydanych.productpage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.example.zadaniebazydanych.Database
 import com.example.zadaniebazydanych.R
 import com.example.zadaniebazydanych.databinding.ActivityProductPageBinding
+import com.example.zadaniebazydanych.notifacation.Notification
 import io.realm.kotlin.types.RealmUUID
 
 class ProductPage : AppCompatActivity() {

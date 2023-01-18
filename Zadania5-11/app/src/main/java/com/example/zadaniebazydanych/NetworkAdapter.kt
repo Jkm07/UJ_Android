@@ -68,6 +68,10 @@ object NetworkAdapter {
 
         @POST("/setUpPayment")
         suspend fun setupPayment(@Body order: Order): Response<Map<String,String>>
+
+        @FormUrlEncoded
+        @POST("/userChat")
+        suspend fun userChat(@Field("message") message: String, @Field("username") username: String) : Response<String>
     }
 
     suspend fun insertProduct(name: String, price: Int, category: Int, desc: String) {
@@ -131,5 +135,10 @@ object NetworkAdapter {
 
     suspend fun setUpPayment(email: String, token: String, realName: String, address: String, basket: Array<BasketItemShort>): Response<Map<String, String>>? {
         return instance.setupPayment(Order(email, token, realName, address,  basket));
+    }
+
+    suspend fun userChat(message: String): String{
+        val result = instance.userChat(message, UserInfo.Username)
+        return result?.body() ?: "Serwer error"
     }
 }
